@@ -16,11 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
+
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
 
-        // Redirect unauthenticated API requests to return JSON error instead of redirecting to login
         $middleware->redirectGuestsTo(function ($request) {
             if ($request->is('api/*')) {
                 abort(401, 'Unauthenticated. Please login first to access this resource.');
@@ -29,12 +32,10 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Ensure API routes return JSON responses
         $exceptions->shouldRenderJsonWhen(function ($request, $exception) {
             return $request->is('api/*') || $request->expectsJson();
         });
 
-        // Custom response for authentication exceptions
         $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
             if ($request->is('api/*') || $request->expectsJson()) {
                 return response()->json([
