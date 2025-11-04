@@ -1,59 +1,176 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Blog API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A clean and well-structured RESTful API built with Laravel 12 for managing blog posts with authentication.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication** - User registration and login with Laravel Sanctum
+- **CRUD Operations** - Complete Create, Read, Update, Delete for blog posts
+- **Authorization** - Users can only modify their own posts
+- **Flexible Pagination** - Customizable items per page (1-100) with validation
+- **Validation** - Comprehensive input validation with custom error messages
+- **Specific Error Messages** - Clear, actionable error messages in Indonesian
+- **Seeding** - Sample data for testing
+- **API Documentation** - Complete documentation with examples
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP >= 8.2
+- Composer
+- MySQL/PostgreSQL/SQLite
+- Laravel 12
 
-## Learning Laravel
+## 🛠️ Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd laravel
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
 
-## Laravel Sponsors
+3. **Setup environment**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. **Configure database**
+   
+   Edit `.env` file and set your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
 
-### Premium Partners
+5. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+6. **Seed database (optional)**
+   ```bash
+   php artisan db:seed
+   ```
+   This will create 6 users and 5 sample posts.
 
-## Contributing
+7. **Start the server**
+   ```bash
+   php artisan serve
+   ```
+   API will be available at `http://localhost:8000`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📚 API Endpoints
 
-## Code of Conduct
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login and get token
+- `POST /api/auth/logout` - Logout (requires auth)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Posts
+- `GET /api/posts` - Get all posts (paginated, customizable)
+  - Query params: `?page=1&per_page=25` (per_page: 1-100, default: 10)
+- `GET /api/posts/{id}` - Get single post
+- `POST /api/posts` - Create post (requires auth)
+- `PUT /api/posts/{id}` - Update post (requires auth & ownership)
+- `DELETE /api/posts/{id}` - Delete post (requires auth & ownership)
 
-## Security Vulnerabilities
+**Documentation:**
+- [ERROR_HANDLING.md](./ERROR_HANDLING.md) - Error codes and messages guide
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🧪 Testing
 
-## License
+You can test the API using:
+- **Postman** - Import the endpoints
+- **cURL** - See examples in API documentation
+- **PHPUnit** - Run `php artisan test`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📁 Project Structure
+
+```
+laravel/
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       ├── Api/
+│   │       │   └── PostController.php    # Post CRUD operations
+│   │       └── Auth/                     # Authentication controllers
+│   └── Models/
+│       ├── Post.php                      # Post model
+│       └── User.php                      # User model
+├── database/
+│   ├── migrations/                       # Database migrations
+│   └── seeders/                          # Database seeders
+├── routes/
+│   ├── api.php                           # API routes
+│   └── auth.php                          # Auth routes
+├── API_DOCUMENTATION.md                  # Detailed API docs
+├── PAGINATION_GUIDE.md                   # Pagination guide
+└── postman_collection.json               # Postman collection
+```
+
+## 🔑 Key Improvements Made
+
+✅ **Model Post** - Added fillable fields, proper casting, and HasFactory trait  
+✅ **Model User** - Added HasApiTokens trait for Sanctum  
+✅ **PostController** - Fully implemented all CRUD methods with validation  
+✅ **Flexible Pagination** - Customizable per_page (1-100) with validation  
+✅ **Specific Error Messages** - Clear error messages for register/login scenarios  
+✅ **Authentication** - Returns Sanctum tokens on login/register  
+✅ **Routes** - Organized with prefixes and middleware groups  
+✅ **Migration** - Added proper columns (title, content, user_id, foreign keys)  
+✅ **Seeder** - Added sample data for testing  
+✅ **Response Format** - Consistent JSON responses with success/message/data  
+✅ **Authorization** - Users can only modify their own posts  
+
+## 📝 Sample Usage
+
+**1. Register a user:**
+```bash
+curl -X POST http://localhost:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John","email":"john@test.com","password":"password123","password_confirmation":"password123"}'
+```
+
+**2. Login:**
+```bash
+curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"john@test.com","password":"password123"}'
+```
+
+**3. Get posts with pagination:**
+```bash
+# Default (10 items per page)
+curl http://localhost:8000/api/posts
+
+# Custom pagination (25 items per page)
+curl "http://localhost:8000/api/posts?per_page=25"
+
+# Specific page
+curl "http://localhost:8000/api/posts?page=2&per_page=20"
+```
+
+**4. Create a post (use token from login):**
+```bash
+curl -X POST http://localhost:8000/api/posts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"title":"My First Post","content":"This is my first blog post!"}'
+```
+
+## 🤝 Contributing
+
+Feel free to submit issues and enhancement requests.
+
+## 📄 License
+
+This project is open-sourced software licensed under the MIT license.
