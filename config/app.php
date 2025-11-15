@@ -56,6 +56,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Frontend URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used to redirect to the frontend after authentication actions
+    | like email verification. Set this in your ".env" file.
+    |
+    */
+
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
